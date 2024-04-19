@@ -27,7 +27,25 @@ export const getData = async (key: string): Promise<any> => {
     }
 }
 
+export const setDataFromServer = async (data) => {
+    const URL = 'https://6620b21f3bf790e070b05290.mockapi.io/api/v1/tasks'
+
+    const res = await fetch(URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
+
+    const tasks = await res.json();
+    return tasks;
+}
+
 export const setData = async (key: string, value: any): Promise<void> => {
+    if (useAPI) {
+        return setDataFromServer(value);
+    }
     try {
         await db.transactionAsync(async tx => {
             await tx.executeSqlAsync(
@@ -40,7 +58,18 @@ export const setData = async (key: string, value: any): Promise<void> => {
     }
 }
 
+export const deleteDataFromServer = async (id) => {
+    const URL = `https://6620b21f3bf790e070b05290.mockapi.io/api/v1/tasks/${id}`;
+
+    const res = await fetch(URL, {
+        method: 'DELETE',
+    });
+}
+
 export const deleteData = async (id: string): Promise<void> => {
+    if (useAPI) {
+        deleteDataFromServer(id);
+    }
     try {
         await db.transactionAsync(async (tx) => {
             await tx.executeSqlAsync(`DELETE FROM Tasks WHERE id=${id}`);
@@ -50,8 +79,25 @@ export const deleteData = async (id: string): Promise<void> => {
     }
 };
 
+export const updateDataToServer = async (data, id) => {
+    const URL = `https://6620b21f3bf790e070b05290.mockapi.io/api/v1/tasks/${id}`;
+
+    const response = await fetch(URL, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
+
+    const updatedData = await response.json();
+    return updatedData;
+};
 
 export const updateData = async (task: any): Promise<void> => {
+    if (useAPI) {
+        updateDataToServer(task, task.id);
+    }
     try {
         await db.transactionAsync(async (tx) => {
             await tx.executeSqlAsync(`UPDATE Tasks

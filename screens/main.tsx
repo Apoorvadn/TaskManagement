@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { colors } from '../assets/colors/globalcolors';
 import CardView from '../components/cardView';
 import { deleteData, getData, setData, updateData } from '../service/storeService';
+import LoadingOverlay from 'components/loadingOverlay';
 
 interface Task {
     id: string;
@@ -21,6 +22,7 @@ interface MainProps {
 
 const Main: FC<MainProps> = ({ navigation, route }) => {
     const [tasks, setTasks] = useState<Task[]>([]);
+    const [fetching, isFetching] = useState(true);
     const params = useMemo(() => route.params, [route.params]);
     DeviceEventEmitter.addListener('deleteEvent', (data: { id: string }) =>
         onDelete(data.id));
@@ -28,12 +30,17 @@ const Main: FC<MainProps> = ({ navigation, route }) => {
 
     useEffect(() => {
         const asyncFnc = async () => {
+            isFetching(true);
             const allTasks = await getData('tasks') || [];
-            console.log(allTasks);
             setTasks(allTasks);
         }
         asyncFnc();
     }, []);
+
+    if (isFetching) {
+        return <loadingOverlay />
+    }
+
 
     useEffect(() => {
         const asyncFnc = async () => {
@@ -53,6 +60,7 @@ const Main: FC<MainProps> = ({ navigation, route }) => {
         asyncFnc();
 
     }, [route?.params?.task, params])
+
 
     const onDelete = async (id: string) => {
         const filteredTask = tasks.filter((task) => task.id !== id);

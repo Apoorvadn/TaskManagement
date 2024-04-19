@@ -1,12 +1,20 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SQLite from 'expo-sqlite';
-import { resolve } from 'path';
 
 const db = SQLite.openDatabase('Tasks', '1.0.0');
+const useAPI = true;
 
+export const getDataFromServer = async () => {
+    const URL = 'https://6620b21f3bf790e070b05290.mockapi.io/api/v1/tasks'
 
+    const res = await fetch(URL);
+    const tasks = await res.json();
+    return tasks;
+}
 
 export const getData = async (key: string): Promise<any> => {
+    if (useAPI) {
+        return getDataFromServer();
+    }
     try {
         return new Promise(async (resolve) => {
             await db.transactionAsync(async (tx) => {

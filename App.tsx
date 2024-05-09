@@ -1,13 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, ViewStyle } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import Main from './screens/main';
-import Manage from './screens/manage';
 import 'react-native-reanimated';
 import 'react-native-gesture-handler';
-import { initDB } from './service/storeService'
 import { useEffect } from 'react';
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import Registration from './screens/registration';
+import Main from './screens/main';
+import Manage from './screens/manage';
+import { initDB } from './service/storeService'
+import { colors } from './assets/colors/globalcolors';
 
 interface AppProps { }
 
@@ -39,6 +42,12 @@ const App: React.FC<AppProps> = () => {
               headerStyle: styles.statusBar,
             }}
           />
+          <Stack.Screen name='Registration' component={Registration} options={
+            {
+              title: 'User Registration Form',
+              headerTintColor: colors.grey
+            }
+          } />
           <Stack.Screen name='ManageTasks' component={Manage} />
         </Stack.Navigator>
       </NavigationContainer>
@@ -47,3 +56,4 @@ const App: React.FC<AppProps> = () => {
 };
 
 export default App;
+

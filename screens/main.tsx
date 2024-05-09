@@ -111,6 +111,9 @@ const Main: FC<MainProps> = ({ navigation, route }) => {
             <TouchableOpacity style={styles.addTaskButton} onPress={() => navigation.navigate('ManageTasks', { isEditing: false })}>
                 <Icon name='add-outline' size={30} color={colors.white} />
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Registration')} style={styles.registerDetailsButton}>
+                <Icon name='document-text-outline' size={30} color={colors.white} />
+            </TouchableOpacity>
         </View>
     );
 }
@@ -146,5 +149,19 @@ const styles = StyleSheet.create({
         height: 70,
         backgroundColor: colors.blue,
         borderRadius: 100,
+    },
+    registerDetailsButton: {
+        bottom: 100,
+        borderWidth: 1,
+        color: colors.grey,
+        backgroundColor: colors.blue,
+        borderRadius: 50,
+        borderColor: 'rgba(0,0,0,0.2)',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 70,
+        position: 'absolute',
+        right: 10,
+        height: 70,
     }
 })

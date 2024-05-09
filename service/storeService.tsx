@@ -81,6 +81,7 @@ export const deleteData = async (id: string): Promise<void> => {
 
 export const updateDataToServer = async (data, id) => {
     const URL = `https://6620b21f3bf790e070b05290.mockapi.io/api/v1/tasks/${id}`;
+    console.log(id);
 
     const response = await fetch(URL, {
         method: 'PUT',
@@ -94,7 +95,9 @@ export const updateDataToServer = async (data, id) => {
     return updatedData;
 };
 
-export const updateData = async (task: any): Promise<void> => {
+export const updateData = async (task: any):
+
+    Promise<void> => {
     if (useAPI) {
         updateDataToServer(task, task.id);
     }
